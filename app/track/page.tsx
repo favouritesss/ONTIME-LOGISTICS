@@ -397,13 +397,28 @@ Customer Service: support@ontime-logistics.com
             onKeyPress={(e) => e.key === "Enter" && handleTrack()}
             className="flex-1 w-full bg-white/20 border-white/30 text-white placeholder-white/70"
           />
-          <Button
-            onClick={handleTrack}
-            disabled={isLoading}
-            className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 flex items-center justify-center"
-          >
-            {isLoading ? "Tracking..." : "Track Package"}
-          </Button>
+                  <Button
+          variant="outline"
+          onClick={() => {
+            setTrackingNumber("ONT123456789")
+            handleTrackWithNumber("ONT123456789")
+          }}
+          className="text-sm"
+        >
+          ONT123456789 (In Transit)
+        </Button>
+
+        <Button
+          variant="outline"
+          onClick={() => {
+            setTrackingNumber("ONT987654321")
+            handleTrackWithNumber("ONT987654321")
+          }}
+          className="text-sm"
+        >
+          ONT987654321 (Delivered)
+        </Button>
+
         </div>
         <p className="text-white/70 text-sm mt-2">
           You can enter up to tracking numbers
