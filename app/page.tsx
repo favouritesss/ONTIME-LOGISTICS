@@ -180,7 +180,7 @@ export default function OnTimeDeliveryPage() {
             <div>
               <Card className="bg-teal-800 text-white p-8">
                 <h3 className="text-2xl font-bold mb-6">Track Your Shipment</h3>
-                <p className="text-gray-200 mb-6">Enter tracking number... (Try: ONT123456789)</p>
+                <p className="text-gray-200 mb-6">Enter tracking number...</p>
                 <div className="space-y-4">
                   <Input
                     placeholder="Enter tracking number..."

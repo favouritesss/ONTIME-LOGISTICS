@@ -370,69 +370,49 @@ Customer Service: support@ontime-logistics.com
       <SharedHeader currentPage="track" />
 
       {/* Hero Section */}
-      <section className="relative h-[500px] bg-teal-800">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url('/hands-using-tablet-device-for-package-tracking-wit.jpg')`,
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-teal-800/80"></div>
+      <section className="relative min-h-[500px] md:min-h-[600px] bg-teal-800">
+  <div
+    className="absolute inset-0 bg-cover bg-center"
+    style={{ backgroundImage: `url('/hands-using-tablet-device-for-package-tracking-wit.jpg')` }}
+  ></div>
+  <div className="absolute inset-0 bg-teal-800/80"></div>
 
-        <div className="relative z-10 flex items-center h-full">
-          <div className="max-w-7xl mx-auto px-4 text-white text-center">
-            <div className="max-w-3xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-balance text-white">
-                Track Your <span className="text-orange-400">Shipment</span>
-              </h1>
-              <p className="text-lg md:text-xl text-pretty text-white mb-8">
-                Get real-time updates on your package location
-              </p>
-              <p className="text-base md:text-lg text-white/90 mb-12">
-                Enter your tracking number to see current status and estimated delivery
-              </p>
+  <div className="relative z-10 flex items-center justify-center h-full px-4">
+    <div className="max-w-3xl w-full text-center text-white">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
+        Track Your <span className="text-orange-400">Shipment</span>
+      </h1>
+      <p className="text-base sm:text-lg md:text-xl mb-6">
+        Get real-time updates on your package location
+      </p>
 
-              {/* Track Your Package Section */}
-              <div className="bg-white/10 backdrop-blur-sm border-white/20 rounded-lg p-8 mb-8">
-                <h2 className="text-2xl font-bold text-white mb-4">Track Your Package</h2>
-                <p className="text-white/90 mb-6">
-                  Enter your tracking number below to get real-time updates on your shipment's location, status, and
-                  estimated delivery time.
-                </p>
-
-                {/* Tracking Form */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Input
-                    placeholder="Enter tracking number (e.g., ONT123456789)"
-                    value={trackingNumber}
-                    onChange={(e) => setTrackingNumber(e.target.value)}
-                    className="flex-1 bg-white/20 border-white/30 text-white placeholder-white/70"
-                    onKeyPress={(e) => e.key === "Enter" && handleTrack()}
-                  />
-                  <Button
-                    onClick={handleTrack}
-                    disabled={isLoading}
-                    className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 flex items-center space-x-2"
-                  >
-                    {isLoading ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        <span>Tracking...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Search className="h-5 w-5" />
-                        <span>Track Package</span>
-                      </>
-                    )}
-                  </Button>
-                </div>
-                <p className="text-white/70 text-sm mt-2">You can enter up to tracking numbers</p>
-              </div>
-            </div>
-          </div>
+      {/* Tracking Form */}
+      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 sm:p-8">
+        <h2 className="text-2xl font-bold mb-4">Track Your Package</h2>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Input
+            placeholder="Enter tracking number"
+            value={trackingNumber}
+            onChange={(e) => setTrackingNumber(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleTrack()}
+            className="flex-1 w-full bg-white/20 border-white/30 text-white placeholder-white/70"
+          />
+          <Button
+            onClick={handleTrack}
+            disabled={isLoading}
+            className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 flex items-center justify-center"
+          >
+            {isLoading ? "Tracking..." : "Track Package"}
+          </Button>
         </div>
-      </section>
+        <p className="text-white/70 text-sm mt-2">
+          You can enter up to tracking numbers
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Tracking Results */}
       {trackingResult && (
