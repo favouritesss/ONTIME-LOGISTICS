@@ -3,11 +3,30 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  console.log("Seeding database...");
+function randomTrackingNumber() {
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const rand = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, "0");
+  return `ONTIME-${date}-${rand}`;
+}
 
-  // Create admin user
-  const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD || "admin123", 10);
+function randomInvoiceNumber() {
+  const year = new Date().getFullYear();
+  const rand = Math.floor(Math.random() * 10000)
+    .toString()
+    .padStart(4, "0");
+  return `INV-${year}-${rand}`;
+}
+
+async function main() {
+  console.log("🌱 Seeding database...");
+
+  // --- Ensure admin user exists ---
+  const passwordHash = await bcrypt.hash(
+    process.env.ADMIN_PASSWORD || "admin123",
+    10
+  );
 
   await prisma.user.upsert({
     where: { email: process.env.ADMIN_EMAIL || "admin@ontime.local" },
@@ -19,13 +38,12 @@ async function main() {
     },
   });
 
-  // Sample shipment
-  await prisma.shipment.create({
-    data: {
-      trackingNumber:
-        "ONTIME-" +
-        new Date().toISOString().slice(0, 10).replace(/-/g, "") +
-        "-000001-7",
+  // --- Ensure at least one sample shipment exists ---
+  await prisma.shipment.upsert({
+    where: { trackingNumber: "ONTIME-SAMPLE-0001" },
+    update: {},
+    create: {
+      trackingNumber: "ONTIME-SAMPLE-0001",
       senderName: "ACME Corp",
       senderAddress: "100 Warehouse St, London, UK",
       recipientName: "John Doe",
@@ -57,7 +75,7 @@ async function main() {
       },
       invoice: {
         create: {
-          invoiceNumber: "INV-2025-0001",
+          invoiceNumber: "INV-SAMPLE-0001",
           amount: 75.0,
           tax: 15.0,
           currency: "GBP",
@@ -66,12 +84,50 @@ async function main() {
     },
   });
 
-  console.log("Seed finished successfully.");
+  // --- Add 3 random new shipments every run ---
+  for (let i = 0; i < 3; i++) {
+    await prisma.shipment.create({
+      data: {
+        trackingNumber: randomTrackingNumber(),
+        senderName: "Global Sender Ltd",
+        senderAddress: "1 Main Street, Berlin, DE",
+        recipientName: "Jane Smith",
+        recipientAddress: "55 Central Ave, Paris, FR",
+        origin: "Berlin, DE",
+        destination: "Paris, FR",
+        weight: Math.random() * 20 + 1,
+        declaredValue: Math.random() * 500 + 50,
+        serviceLevel: Math.random() > 0.5 ? "STANDARD" : "EXPRESS",
+        events: {
+          create: [
+            {
+              statusCode: "PICKED_UP",
+              description: "Package picked up from sender",
+              city: "Berlin",
+              country: "DE",
+              lat: 52.52,
+              lon: 13.405,
+            },
+          ],
+        },
+        invoice: {
+          create: {
+            invoiceNumber: randomInvoiceNumber(),
+            amount: Math.random() * 200 + 50,
+            tax: 15.0,
+            currency: "EUR",
+          },
+        },
+      },
+    });
+  }
+
+  console.log("✅ Seed finished successfully.");
 }
 
 main()
   .catch((e) => {
-    console.error("Seed failed:", e);
+    console.error("❌ Seed failed:", e);
     process.exit(1);
   })
   .finally(async () => {
