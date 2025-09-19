@@ -11,7 +11,8 @@
     "prisma:migrate": "prisma migrate dev --name init",
     "seed:build": "tsc prisma/seed.ts --outDir dist",
     "seed": "node dist/seed.js",
-    "prisma:seed": "npm run seed:build && npm run seed"
+    "prisma:seed": "npm run seed:build && npm run seed",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
