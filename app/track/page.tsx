@@ -31,7 +31,7 @@ import SharedHeader from "@/components/shared-header"
 import SharedFooter from "@/components/shared-footer"
 import ScrollToTop from "@/components/scroll-to-top"
 
-const TrackingMap = dynamic(() => import("@/components/tracking-map"), {
+const TrackingMap = dynamic<any>(() => import("@/components/tracking-map"), {
   ssr: false,
   loading: () => (
     <div className="h-96 bg-gray-100 rounded-lg flex items-center justify-center">
