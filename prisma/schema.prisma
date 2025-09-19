@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String
+  role      String  @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model Shipment {
+  id             Int              @id @default(autoincrement())
+  trackingNumber String           @unique
+  senderName     String
+  senderAddress  String
+  recipientName  String
+  recipientAddress String
+  origin         String
+  destination    String
+  weight         Float?
+  declaredValue  Float?
+  serviceLevel   String?
+  status         String           @default("PENDING")
+  createdAt      DateTime         @default(now())
+  events         ShipmentEvent[]
+  invoice        Invoice?
+}
+
+model ShipmentEvent {
+  id         Int      @id @default(autoincrement())
+  shipment   Shipment @relation(fields: [shipmentId], references: [id])
+  shipmentId Int
+  statusCode String
+  description String?
+  facilityCode String?
+  city       String?
+  country    String?
+  lat        Float?
+  lon        Float?
+  scannedAt  DateTime @default(now())
+}
+
+model Invoice {
+  id           Int      @id @default(autoincrement())
+  shipment     Shipment @relation(fields: [shipmentId], references: [id])
+  shipmentId   Int      @unique
+  invoiceNumber String  @unique
+  amount       Float
+  tax          Float?
+  currency     String   @default("USD")
+  issuedAt     DateTime @default(now())
+  pdfPath      String?
+}
